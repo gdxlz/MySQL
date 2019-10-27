@@ -8,4 +8,7 @@ public class FirstClass {
         System.out.println("44444444444");
 
     }
+    public void test(){
+        System.out.println("test");
+    }
 }
