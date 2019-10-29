@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+            http://www.springframework.org/schema/context   
+            http://www.springframework.org/schema/context/spring-context-3.2.xsd  
+            http://www.springframework.org/schema/mvc  
+            http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+            http://www.springframework.org/schema/util  
+            http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+  
+	
+	<!-- 以上两段配置可以省略 -->
+	<!--  <mvc:annotation-driven /> 是一种简写形式，完全可以手动配置替代这种简写形式，简写形式可以让初学都快速应用默认配置方案。
+	<mvc:annotation-driven /> 会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 两个bean,
+	是spring MVC为@Controllers分发请求所必须的，即解决了@Controller注解使用的前提配置。
+	同时它还提供了：数据绑定支持，@NumberFormatannotation支持，@DateTimeFormat支持，@Valid支持，
+	读写XML的支持（JAXB，读写JSON的支持（Jackson）。
+	我们处理响应ajax请求时，就使用到了对json的支持（配置之后，在加入了jackson的core和mapper包之后，不写配置文件也能自动转换成json）。 -->
+	<!-- 在该文件里面添加了配置之后要记得在这里添加对应的 驱动-->
+	 <mvc:annotation-driven conversion-service="conversionService" validator="validator" />
+	<!-- 
+		 加了类型转换器，静态资源 使用此种方法解析
+    	 它的意思就是没有映射到的URL交给默认的web容器中的servlet进行处理：
+     -->
+	<mvc:default-servlet-handler/>
+	
+	<!-- 扫描controller包 -->
+	<context:component-scan base-package="cn.web.auction.controller"></context:component-scan>
+	
+	<!-- 视图解析器(只是为地址 加前缀和后缀？？？) -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- 日期转换器配置 -->
+ <bean id="conversionService"
+  class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+  <property name="converters">
+   <list>
+    <bean class="cn.web.auction.utils.DateConverter" />
+   </list>
+  </property>
+ </bean>
+ 
+ <!-- 校验器 -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<!-- hibernate校验器 -->
+		<property name="providerClass"
+			value="org.hibernate.validator.HibernateValidator" />
+		<!-- 指定校验使用的资源文件，在文件中配置校验错误信息，如果不指定则默认使用classpath下的ValidationMessages.properties -->
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
+
+	<!-- 校验错误信息配置文件 xxx.properties -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- 资源文件名 基名 -->
+		<property name="basenames">
+			<list>
+				<value>classpath:CustomValidationMessages</value>
+			</list>
+		</property>
+		<!-- 资源文件编码格式 -->
+		<property name="fileEncodings" value="utf-8" />
+		<!-- 对资源文件内容缓存时间，单位秒 -->
+		<property name="cacheSeconds" value="120" />
+	</bean>
+
+	<!-- 支持文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="104857600" />
+		<property name="maxInMemorySize" value="4096" />
+		<property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
+	
+    <!-- 拦截器 -->
+    
+	<mvc:interceptors>
+	    <mvc:interceptor>
+	        <mvc:mapping path="/**"/>
+	        <mvc:exclude-mapping path="/user/doLogin"/>
+	        <mvc:exclude-mapping path="/user/register"/>
+	             <mvc:exclude-mapping path="/css/**"/>
+	              <mvc:exclude-mapping path="/images/**"/>
+	               <mvc:exclude-mapping path="/js/**"/>
+	        <bean class="cn.web.auction.interceptor.LoginInterceptor"></bean>
+	    </mvc:interceptor>
+	</mvc:interceptors>
+
+ 
+</beans>
