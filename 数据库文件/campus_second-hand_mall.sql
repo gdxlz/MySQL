@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50626
 File Encoding         : 65001
 
-Date: 2019-10-28 18:59:32
+Date: 2019-10-29 13:17:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,7 +25,7 @@ CREATE TABLE `good` (
   `user_id` int(11) NOT NULL,
   `price` float(10,2) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
-  `catelog_id` int(1) NOT NULL,
+  `catelog` varchar(20) NOT NULL,
   `status` int(1) NOT NULL,
   PRIMARY KEY (`good_id`),
   KEY `userId` (`user_id`),
@@ -35,17 +35,17 @@ CREATE TABLE `good` (
 -- ----------------------------
 -- Records of good
 -- ----------------------------
-INSERT INTO `good` VALUES ('1', 'u盘', '17', '50.00', '闪迪u盘', '1', '0');
-INSERT INTO `good` VALUES ('2', '洗发水', '20', '40.00', '正品阿道夫800ml', '6', '0');
-INSERT INTO `good` VALUES ('3', '吹风机', '24', '80.00', '静音大功率', '3', '0');
-INSERT INTO `good` VALUES ('4', '食用油', '26', '30.00', '金龙鱼', '6', '0');
-INSERT INTO `good` VALUES ('5', '口红', '22', '100.00', '阿玛尼', '6', '0');
-INSERT INTO `good` VALUES ('6', '洗面奶', '20', '60.00', '雅诗兰黛', '6', '0');
-INSERT INTO `good` VALUES ('7', '手机', '17', '1900.00', '荣耀20', '5', '0');
-INSERT INTO `good` VALUES ('8', '鼠标', '18', '70.00', '机械键盘配套', '5', '1');
-INSERT INTO `good` VALUES ('9', '书包', '27', '50.00', '蓝色小书包', '6', '0');
-INSERT INTO `good` VALUES ('10', '钢笔', '17', '10.00', '英雄牌钢笔', '6', '1');
-INSERT INTO `good` VALUES ('13', '沙滩照片', '17', '22.00', '这是一张沙滩照片', '3', '0');
+INSERT INTO `good` VALUES ('1', 'u盘', '17', '50.00', '闪迪u盘', '电子产品', '0');
+INSERT INTO `good` VALUES ('2', '洗发水', '20', '40.00', '正品阿道夫800ml', '生活用品', '0');
+INSERT INTO `good` VALUES ('3', '吹风机', '24', '80.00', '静音大功率', '家电', '0');
+INSERT INTO `good` VALUES ('4', '食用油', '26', '30.00', '金龙鱼', '旧书', '0');
+INSERT INTO `good` VALUES ('5', '口红', '22', '100.00', '阿玛尼', '生活用品', '0');
+INSERT INTO `good` VALUES ('6', '洗面奶', '20', '60.00', '雅诗兰黛', '生活用品', '0');
+INSERT INTO `good` VALUES ('7', '手机', '17', '1900.00', '荣耀20', '电子产品', '0');
+INSERT INTO `good` VALUES ('8', '鼠标', '18', '70.00', '机械键盘配套', '电子产品', '1');
+INSERT INTO `good` VALUES ('9', '书包', '27', '50.00', '蓝色小书包', '生活用品', '0');
+INSERT INTO `good` VALUES ('10', '钢笔', '17', '10.00', '英雄牌钢笔', '生活用品', '1');
+INSERT INTO `good` VALUES ('13', '沙滩照片', '17', '22.00', '这是一张沙滩照片', '生活用品', '0');
 
 -- ----------------------------
 -- Table structure for pictures
@@ -91,6 +91,7 @@ CREATE TABLE `tab_user` (
   `email` varchar(300) DEFAULT NULL,
   `status` char(3) DEFAULT NULL,
   `code` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`uid`),
   KEY `uid` (`uid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
